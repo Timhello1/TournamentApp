@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: tournament-hub-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:8080
+      - key: CORS_ORIGINS
+        sync: false
+      - key: ADMIN_API_KEY
+        sync: false
+      # Ephemeral SQLite on free tier (no persistent disk). Data resets on redeploy.
+      - key: ConnectionStrings__Default
+        value: Data Source=/tmp/tournament.db

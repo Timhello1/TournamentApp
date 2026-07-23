@@ -1,0 +1,88 @@
+.hero {
+  position: relative;
+  min-height: calc(100vh - var(--nav-height));
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-8) 0;
+  max-width: 40rem;
+}
+
+.kicker {
+  font-family: var(--font-display);
+  letter-spacing: 0.22em;
+  color: var(--color-brand);
+  font-size: 1.15rem;
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  font-size: clamp(3.4rem, 10vw, 6.2rem);
+  margin-bottom: var(--space-4);
+  text-wrap: balance;
+}
+
+.lead {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  max-width: 32rem;
+  margin-bottom: var(--space-6);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, transparent 40%, rgba(245, 166, 35, 0.05) 55%, transparent 70%),
+    repeating-linear-gradient(
+      -12deg,
+      transparent,
+      transparent 48px,
+      rgba(255, 255, 255, 0.015) 48px,
+      rgba(255, 255, 255, 0.015) 49px
+    );
+}
+
+.stripe {
+  position: absolute;
+  right: -10%;
+  top: 18%;
+  width: 55vw;
+  max-width: 720px;
+  height: 55vh;
+  border: 1px solid rgba(245, 166, 35, 0.28);
+  border-radius: 40% 60% 55% 45% / 45% 40% 60% 55%;
+  transform: rotate(18deg);
+  animation: pulse-line 5s ease-in-out infinite;
+}
+
+.glow {
+  position: absolute;
+  right: 5%;
+  bottom: 10%;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 166, 35, 0.22), transparent 70%);
+  filter: blur(8px);
+  animation: rise 1.2s ease both;
+}
+
+@media (max-width: 720px) {
+  .stripe {
+    opacity: 0.45;
+  }
+}

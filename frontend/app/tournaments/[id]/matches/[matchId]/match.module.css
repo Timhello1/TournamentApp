@@ -1,0 +1,18 @@
+.title span {
+  color: var(--color-brand);
+  margin: 0 0.35rem;
+}
+
+.forms {
+  margin-top: var(--space-4);
+}
+
+.forms h2 {
+  font-size: 1.6rem;
+}
+
+.scores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}

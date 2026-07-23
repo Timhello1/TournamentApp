@@ -1,0 +1,19 @@
+.wrap {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.block {
+  animation-delay: 0.05s;
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: var(--space-3);
+  color: var(--color-brand-hot);
+}
+
+.hint {
+  margin-top: var(--space-3);
+  font-size: 0.85rem;
+}

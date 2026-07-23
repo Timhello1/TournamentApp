@@ -1,0 +1,92 @@
+.scroller {
+  overflow-x: auto;
+  padding-bottom: var(--space-4);
+}
+
+.rounds {
+  display: flex;
+  gap: var(--space-6);
+  min-width: max-content;
+  align-items: stretch;
+  padding: var(--space-2);
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 220px;
+  animation: rise 0.55s ease both;
+}
+
+.roundLabel {
+  font-size: 1.35rem;
+  color: var(--color-brand);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+}
+
+.matches {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex: 1;
+  gap: var(--space-5);
+}
+
+.match {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.match:hover {
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-glow);
+}
+
+.match::after {
+  content: "";
+  position: absolute;
+  right: -1.4rem;
+  top: 50%;
+  width: 1.4rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-border-strong), transparent);
+  animation: pulse-line 2.4s ease-in-out infinite;
+}
+
+.round:last-child .match::after {
+  display: none;
+}
+
+.slot {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0.65rem 0.8rem;
+  background: var(--color-bg-soft);
+}
+
+.slot em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  color: var(--color-brand-hot);
+  min-width: 1.2rem;
+  text-align: right;
+}
+
+.connector {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.emptyTitle {
+  font-size: 2rem;
+  margin-bottom: var(--space-2);
+}

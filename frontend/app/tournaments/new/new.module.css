@@ -1,0 +1,7 @@
+.form {
+  max-width: 720px;
+}
+
+.scoring {
+  margin-top: var(--space-2);
+}
