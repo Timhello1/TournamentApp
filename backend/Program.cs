@@ -50,7 +50,11 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    var provider = db.Database.ProviderName ?? "";
+    if (provider.Contains("Npgsql", StringComparison.OrdinalIgnoreCase))
+        db.Database.Migrate();
+    else
+        db.Database.EnsureCreated();
 }
 
 if (app.Environment.IsDevelopment())

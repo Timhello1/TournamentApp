@@ -69,7 +69,7 @@ git push
    - `ConnectionStrings__Default` = paste the **Neon** connection string (full URI)
    - `CORS_ORIGINS` = `https://YOUR_APP.vercel.app` (exact frontend origin)
    - Optional: `ADMIN_API_KEY`
-3. Deploy. On first boot the API creates tables automatically (`EnsureCreated`).
+3. Deploy. On first boot the API applies EF migrations automatically (`Database.Migrate()`). Use the Supabase **Session pooler** connection string on Render (not Transaction/direct IPv6).
 4. Copy the Render URL, e.g. `https://tournamentapp-xxxx.onrender.com`
 
 Cold starts on free Render can take 30–60s after idle.
