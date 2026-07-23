@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { PageSkeleton } from "@/components/Skeleton";
 import { api, progressLabel, type TournamentSummary } from "@/lib/api";
 import styles from "./tournaments.module.css";
 
@@ -59,7 +60,7 @@ export default function TournamentsPage() {
         </div>
 
         {error && <p className="error">{error}</p>}
-        {loading && <p className="muted">Loading…</p>}
+        {loading && <PageSkeleton rows={5} />}
 
         {!loading && items.length === 0 && (
           <div className="panel">

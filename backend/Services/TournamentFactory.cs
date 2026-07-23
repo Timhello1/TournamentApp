@@ -33,7 +33,6 @@ public class TournamentFactory
         var target = Math.Clamp(tournament.TargetGroupSize, 2, 8);
         var groupCount = Math.Max(1, (int)Math.Ceiling(teams.Count / (double)target));
 
-        // Prefer more balanced groups when possible
         while (groupCount > 1 && teams.Count / groupCount < 2)
             groupCount--;
 
@@ -65,26 +64,8 @@ public class TournamentFactory
 
         foreach (var group in groups)
         {
-            var groupTeams = group.GroupTeams.Select(gt => gt.Team).ToList();
-            var position = 0;
-            for (var i = 0; i < groupTeams.Count; i++)
-            {
-                for (var j = i + 1; j < groupTeams.Count; j++)
-                {
-                    tournament.Matches.Add(new Match
-                    {
-                        Tournament = tournament,
-                        Stage = MatchStage.Group,
-                        Status = MatchStatus.Scheduled,
-                        Group = group,
-                        Round = 1,
-                        Position = position++,
-                        Label = $"{group.Name} RR",
-                        HomeTeam = groupTeams[i],
-                        AwayTeam = groupTeams[j]
-                    });
-                }
-            }
+            var groupTeams = group.GroupTeams.OrderBy(gt => gt.Seed).Select(gt => gt.Team).ToList();
+            RoundRobin.AddGroupMatches(tournament, group, groupTeams);
         }
     }
 

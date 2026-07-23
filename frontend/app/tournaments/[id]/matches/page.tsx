@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { MatchList } from "@/components/MatchList";
+import { PageSkeleton } from "@/components/Skeleton";
 import { TournamentNav } from "@/components/TournamentNav";
 import { api, type Match, type TournamentDetail } from "@/lib/api";
 
@@ -37,11 +38,7 @@ export default function MatchesPage() {
   }
 
   if (!t) {
-    return (
-      <div className="page container">
-        <p className="muted">Loading matches…</p>
-      </div>
-    );
+    return <PageSkeleton rows={6} />;
   }
 
   return (

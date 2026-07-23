@@ -94,17 +94,26 @@ app.MapGet("/api/health", () => Results.Ok(new { status = "ok", service = "tourn
 app.MapGet("/api/tournaments", async (AppDbContext db) =>
 {
     var list = await db.Tournaments
-        .Include(t => t.Teams)
-        .Include(t => t.Groups)
-        .Include(t => t.Matches)
+        .AsNoTracking()
         .OrderByDescending(t => t.CreatedAt)
+        .Select(t => new TournamentSummaryDto(
+            t.Id,
+            t.Name,
+            t.Description,
+            t.CreatedAt,
+            t.Teams.Count,
+            t.Groups.Count,
+            t.Matches.Count,
+            t.KnockoutGenerated,
+            t.Matches.Count(m => m.Stage == MatchStage.Group && m.Status == MatchStatus.Completed),
+            t.Matches.Count(m => m.Stage == MatchStage.Group)))
         .ToListAsync();
-    return Results.Ok(list.Select(Mapper.ToSummary));
+    return Results.Ok(list);
 });
 
 app.MapGet("/api/tournaments/{id:int}", async (int id, AppDbContext db) =>
 {
-    var t = await LoadTournamentAsync(db, id);
+    var t = await LoadTournamentDetailAsync(db, id);
     return t is null ? Results.NotFound() : Results.Ok(Mapper.ToDetail(t));
 });
 
@@ -141,7 +150,7 @@ app.MapPost("/api/tournaments", async (
     db.Tournaments.Add(tournament);
     await db.SaveChangesAsync();
 
-    var created = await LoadTournamentAsync(db, tournament.Id);
+    var created = await LoadTournamentDetailAsync(db, tournament.Id);
     return Results.Created($"/api/tournaments/{tournament.Id}", Mapper.ToDetail(created!));
 });
 
@@ -159,7 +168,7 @@ app.MapPut("/api/tournaments/{id:int}", async (int id, UpdateTournamentRequest r
         t.AdvancePerGroup = Math.Clamp(req.AdvancePerGroup.Value, 1, 8);
 
     await db.SaveChangesAsync();
-    var updated = await LoadTournamentAsync(db, id);
+    var updated = await LoadTournamentDetailAsync(db, id);
     return Results.Ok(Mapper.ToDetail(updated!));
 });
 
@@ -210,8 +219,8 @@ app.MapGet("/api/tournaments/{id:int}/matches", async (int id, string? stage, Ap
     var matches = await query
         .OrderBy(m => m.Stage)
         .ThenBy(m => m.Round)
-        .ThenBy(m => m.GroupId)
         .ThenBy(m => m.Position)
+        .ThenBy(m => m.GroupId)
         .ToListAsync();
 
     return Results.Ok(matches.Select(Mapper.ToDto));
@@ -287,17 +296,25 @@ app.MapPut("/api/matches/{matchId:int}/result", async (
 
     if (m.Stage == MatchStage.Group)
     {
-        var tournament = await LoadTournamentAsync(db, m.TournamentId);
-        if (tournament is not null && !tournament.KnockoutGenerated)
+        var incomplete = await db.Matches.CountAsync(x =>
+            x.TournamentId == m.TournamentId &&
+            x.Stage == MatchStage.Group &&
+            x.Status != MatchStatus.Completed);
+
+        if (incomplete == 0)
         {
-            try
+            var tournament = await LoadTournamentAsync(db, m.TournamentId);
+            if (tournament is not null && !tournament.KnockoutGenerated)
             {
-                bracket.GenerateIfReady(tournament);
-                await db.SaveChangesAsync();
-            }
-            catch (InvalidOperationException)
-            {
-                // Not enough qualifiers — leave knockout ungenerated
+                try
+                {
+                    bracket.GenerateIfReady(tournament);
+                    await db.SaveChangesAsync();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Not enough qualifiers — leave knockout ungenerated
+                }
             }
         }
     }
@@ -397,7 +414,7 @@ app.MapPost("/api/seed", async (AppDbContext db, TournamentFactory factory) =>
     db.Tournaments.Add(tournament);
     await db.SaveChangesAsync();
 
-    var created = await LoadTournamentAsync(db, tournament.Id);
+    var created = await LoadTournamentDetailAsync(db, tournament.Id);
     return Results.Created($"/api/tournaments/{tournament.Id}", Mapper.ToDetail(created!));
 });
 
@@ -418,7 +435,7 @@ app.MapPost("/api/tournaments/{id:int}/groups/move", async (
     {
         return Results.BadRequest(new { error = ex.Message });
     }
-    var updated = await LoadTournamentAsync(db, id);
+    var updated = await LoadTournamentDetailAsync(db, id);
     return Results.Ok(Mapper.ToDetail(updated!));
 });
 
@@ -437,7 +454,7 @@ app.MapPost("/api/tournaments/{id:int}/groups/shuffle", async (
     {
         return Results.BadRequest(new { error = ex.Message });
     }
-    var updated = await LoadTournamentAsync(db, id);
+    var updated = await LoadTournamentDetailAsync(db, id);
     return Results.Ok(Mapper.ToDetail(updated!));
 });
 
@@ -457,7 +474,7 @@ app.MapPost("/api/tournaments/{id:int}/groups", async (
     {
         return Results.BadRequest(new { error = ex.Message });
     }
-    var updated = await LoadTournamentAsync(db, id);
+    var updated = await LoadTournamentDetailAsync(db, id);
     return Results.Ok(Mapper.ToDetail(updated!));
 });
 
@@ -477,7 +494,7 @@ app.MapPost("/api/tournaments/{id:int}/teams", async (
     {
         return Results.BadRequest(new { error = ex.Message });
     }
-    var updated = await LoadTournamentAsync(db, id);
+    var updated = await LoadTournamentDetailAsync(db, id);
     return Results.Ok(Mapper.ToDetail(updated!));
 });
 
@@ -494,9 +511,14 @@ app.MapPost("/api/calendar/reschedule", async (
 
 app.Run();
 
-static async Task<Tournament?> LoadTournamentAsync(AppDbContext db, int id)
+static async Task<Tournament?> LoadTournamentAsync(AppDbContext db, int id, bool tracking = true)
 {
-    return await db.Tournaments
+    IQueryable<Tournament> q = db.Tournaments;
+    if (!tracking)
+        q = q.AsNoTracking();
+
+    return await q
+        .AsSplitQuery()
         .Include(t => t.Teams)
         .Include(t => t.Groups)
             .ThenInclude(g => g.GroupTeams)
@@ -509,6 +531,20 @@ static async Task<Tournament?> LoadTournamentAsync(AppDbContext db, int id)
             .ThenInclude(m => m.Group)
         .Include(t => t.Matches)
             .ThenInclude(m => m.NextMatch)
+        .FirstOrDefaultAsync(t => t.Id == id);
+}
+
+static async Task<Tournament?> LoadTournamentDetailAsync(AppDbContext db, int id)
+{
+    // Detail DTO only needs match counts — skip team joins on every match
+    return await db.Tournaments
+        .AsNoTracking()
+        .AsSplitQuery()
+        .Include(t => t.Teams)
+        .Include(t => t.Groups)
+            .ThenInclude(g => g.GroupTeams)
+                .ThenInclude(gt => gt.Team)
+        .Include(t => t.Matches)
         .FirstOrDefaultAsync(t => t.Id == id);
 }
 

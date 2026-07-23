@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { PageSkeleton } from "@/components/Skeleton";
 import { BracketView } from "@/components/BracketView";
 import { TournamentNav } from "@/components/TournamentNav";
 import { api, type Bracket, type TournamentDetail } from "@/lib/api";
@@ -31,11 +32,7 @@ export default function BracketPage() {
   }
 
   if (!t || !bracket) {
-    return (
-      <div className="page container">
-        <p className="muted">Loading bracket…</p>
-      </div>
-    );
+    return <PageSkeleton rows={3} />;
   }
 
   return (

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { PageSkeleton } from "@/components/Skeleton";
 import { api, type CalendarDay } from "@/lib/api";
 import styles from "./calendar.module.css";
 
@@ -25,6 +26,7 @@ export default function CalendarPage() {
   const [year, setYear] = useState(now.getUTCFullYear());
   const [month, setMonth] = useState(now.getUTCMonth());
   const [days, setDays] = useState<CalendarDay[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [startDate, setStartDate] = useState(() => now.toISOString().slice(0, 10));
@@ -34,6 +36,8 @@ export default function CalendarPage() {
       setDays(await api.getCalendar());
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load calendar");
+    } finally {
+      setLoading(false);
     }
   }
 

@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { PageSkeleton } from "@/components/Skeleton";
 import { StandingsTables } from "@/components/StandingsTable";
 import { TournamentNav } from "@/components/TournamentNav";
 import { api, type GroupStandings, type TournamentDetail } from "@/lib/api";
@@ -31,11 +32,7 @@ export default function GroupsPage() {
   }
 
   if (!t) {
-    return (
-      <div className="page container">
-        <p className="muted">Loading standings…</p>
-      </div>
-    );
+    return <PageSkeleton rows={4} />;
   }
 
   return (

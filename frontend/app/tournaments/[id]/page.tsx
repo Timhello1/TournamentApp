@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { PageSkeleton } from "@/components/Skeleton";
 import { TournamentNav } from "@/components/TournamentNav";
 import { api, progressLabel, type TournamentDetail } from "@/lib/api";
 import styles from "./detail.module.css";
@@ -43,11 +44,7 @@ export default function TournamentDetailPage() {
   }
 
   if (!t) {
-    return (
-      <div className="page container">
-        <p className="muted">Loading tournament…</p>
-      </div>
-    );
+    return <PageSkeleton rows={4} />;
   }
 
   const pct =

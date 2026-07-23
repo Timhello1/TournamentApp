@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
+import { PageSkeleton } from "@/components/Skeleton";
 import { api, formatWhen, type Match } from "@/lib/api";
 import styles from "./match.module.css";
 
@@ -75,11 +76,7 @@ export default function MatchDetailPage() {
   }
 
   if (!match) {
-    return (
-      <div className="page container">
-        <p className="muted">Loading match…</p>
-      </div>
-    );
+    return <PageSkeleton rows={3} />;
   }
 
   const canEdit = match.status !== "Bye";

@@ -163,26 +163,8 @@ public class GroupManager
 
         foreach (var group in tournament.Groups.OrderBy(g => g.SortOrder))
         {
-            var teams = group.GroupTeams.Select(gt => gt.Team).ToList();
-            var position = 0;
-            for (var i = 0; i < teams.Count; i++)
-            {
-                for (var j = i + 1; j < teams.Count; j++)
-                {
-                    tournament.Matches.Add(new Match
-                    {
-                        Tournament = tournament,
-                        Stage = MatchStage.Group,
-                        Status = MatchStatus.Scheduled,
-                        Group = group,
-                        Round = 1,
-                        Position = position++,
-                        Label = $"{group.Name} RR",
-                        HomeTeam = teams[i],
-                        AwayTeam = teams[j]
-                    });
-                }
-            }
+            var teams = group.GroupTeams.OrderBy(gt => gt.Seed).Select(gt => gt.Team).ToList();
+            RoundRobin.AddGroupMatches(tournament, group, teams);
         }
     }
 

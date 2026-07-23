@@ -49,3 +49,14 @@
   min-width: 3.5rem;
   text-align: center;
 }
+
+.sections {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.sectionTitle {
+  font-size: 1.6rem;
+  margin-bottom: var(--space-3);
+  color: var(--color-brand-hot);
+}

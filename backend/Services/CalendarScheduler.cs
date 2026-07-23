@@ -51,13 +51,15 @@ public class CalendarScheduler
             .ThenBy(t => t.Id)
             .ToListAsync();
 
+        // Order: group matchdays across groups (R1 P0 of every group, then R1 P1…), then KO.
+        // Calendar then rotates tournaments: T1 next, T2 next, T3 next, …
         var queues = tournaments
             .Select(t => t.Matches
                 .Where(m => m.Status != MatchStatus.Bye)
                 .OrderBy(m => m.Stage)
                 .ThenBy(m => m.Round)
-                .ThenBy(m => m.GroupId)
                 .ThenBy(m => m.Position)
+                .ThenBy(m => m.Group?.SortOrder ?? m.GroupId ?? 0)
                 .ThenBy(m => m.Id)
                 .ToList())
             .Where(q => q.Count > 0)

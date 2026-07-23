@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState, type DragEvent, type FormEvent } from "react";
+import { CardGridSkeleton, PageSkeleton } from "@/components/Skeleton";
 import { TournamentNav } from "@/components/TournamentNav";
 import { api, type TournamentDetail } from "@/lib/api";
 import styles from "./manage.module.css";
@@ -74,11 +75,7 @@ export default function ManageGroupsPage() {
   }
 
   if (!t && !error) {
-    return (
-      <div className="page container">
-        <p className="muted">Loading groups…</p>
-      </div>
-    );
+    return <PageSkeleton rows={3} />;
   }
 
   if (!t) {
