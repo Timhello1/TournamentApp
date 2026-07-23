@@ -14,8 +14,13 @@ builder.Services.ConfigureHttpJsonOptions(o =>
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var cs = builder.Configuration.GetConnectionString("Default")
+             ?? Environment.GetEnvironmentVariable("DATABASE_URL")
              ?? "Data Source=tournament.db";
-    options.UseSqlite(cs);
+
+    if (IsPostgresConnectionString(cs))
+        options.UseNpgsql(NormalizePostgresConnectionString(cs));
+    else
+        options.UseSqlite(cs);
 });
 
 builder.Services.AddScoped<TournamentFactory>();
@@ -501,4 +506,27 @@ static async Task<Tournament?> LoadTournamentAsync(AppDbContext db, int id)
         .Include(t => t.Matches)
             .ThenInclude(m => m.NextMatch)
         .FirstOrDefaultAsync(t => t.Id == id);
+}
+
+static bool IsPostgresConnectionString(string cs) =>
+    cs.Contains("Host=", StringComparison.OrdinalIgnoreCase)
+    || cs.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+    || cs.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase);
+
+static string NormalizePostgresConnectionString(string cs)
+{
+    if (!cs.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+        && !cs.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+    {
+        return cs;
+    }
+
+    var uri = new Uri(cs);
+    var userInfo = uri.UserInfo.Split(':', 2);
+    var user = Uri.UnescapeDataString(userInfo[0]);
+    var pass = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
+    var database = uri.AbsolutePath.Trim('/');
+    var port = uri.IsDefaultPort ? 5432 : uri.Port;
+
+    return $"Host={uri.Host};Port={port};Database={database};Username={user};Password={pass};SSL Mode=Require;Trust Server Certificate=true";
 }

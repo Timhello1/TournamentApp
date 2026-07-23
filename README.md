@@ -2,7 +2,7 @@
 
 Two-stage tournament hosting: group stage (round-robin) to single-elimination knockout.
 
-Backend: ASP.NET Core 8 Web API + EF Core + SQLite  
+Backend: ASP.NET Core 8 Web API + EF Core (SQLite locally, PostgreSQL/Neon in production)  
 Frontend: Next.js App Router + React + TypeScript
 
 ## Quick start
@@ -23,6 +23,8 @@ dotnet run
 API: http://localhost:5080  
 Swagger: http://localhost:5080/swagger
 
+Local default DB is SQLite (`tournament.db`).
+
 ### Frontend
 
 ```
@@ -39,68 +41,52 @@ Optional env in `frontend/.env.local`:
 NEXT_PUBLIC_API_URL=http://localhost:5080
 ```
 
-### Optional admin key
+## Free hosting ($0) with persistent data
 
-If `ADMIN_API_KEY` is set on the backend, write endpoints require header `X-Admin-Api-Key`.  
-Read endpoints stay public. Leave unset for open demo mode.
+Stack: **GitHub** + **Neon** (Postgres) + **Render** (API) + **Vercel** (Next.js).
 
-## MVP features
+### 1. Create a Neon database
 
-- Create named tournaments with many teams
-- Auto group stage (~4 teams per group, round-robin)
-- Configurable scoring (default 3/1/0) and top-N advancement (default 2)
-- Tiebreakers: points, goal difference, goals for
-- Schedule matches and enter results
-- Standings recalculate automatically
-- Knockout bracket auto-generates when group stage completes
-- Screens: list, detail, groups, matches, bracket, match result entry
+1. Sign up at https://console.neon.tech (free)
+2. Create a project (any name/region)
+3. Open **Dashboard → Connection details**
+4. Copy the connection string (URI). It looks like:
+   `postgresql://USER:PASSWORD@ep-xxxx.region.aws.neon.tech/neondb?sslmode=require`
+5. Keep this secret — do not commit it to git
 
-## Free hosting ($0)
-
-Stack: **GitHub** (source) + **Render** (API) + **Vercel** (Next.js).
-
-SQLite on Render free is **ephemeral** (no free persistent disk) — data can reset on redeploy. Fine for demos.
-
-### 1. Put the code on GitHub
-
-Create a public repo, then from this folder:
+### 2. Put the code on GitHub
 
 ```
 git add .
-git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "Initial Tournament Hub app"
-git branch -M main
-git remote add origin https://github.com/YOUR_USER/tournament-hub.git
-git push -u origin main
+git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "Use Neon Postgres for persistent hosting"
+git push
 ```
 
-### 2. Backend on Render (free)
+### 3. Backend on Render
 
-1. Sign up at https://render.com with GitHub
-2. **New → Web Service** → select this repo
-3. Root directory: `backend`
-4. Runtime: **Docker** (uses `backend/Dockerfile`)
-5. Instance type: **Free**
-6. Environment variables:
-   - `CORS_ORIGINS` = `https://YOUR_APP.vercel.app` (update after step 3)
-   - Optional: `ADMIN_API_KEY` = a secret string
-7. Deploy → copy the service URL, e.g. `https://tournament-hub-api.onrender.com`
+1. https://render.com → Web Service → this repo → root `backend` → Docker → Free
+2. Environment variables:
+   - `ConnectionStrings__Default` = paste the **Neon** connection string (full URI)
+   - `CORS_ORIGINS` = `https://YOUR_APP.vercel.app` (exact frontend origin)
+   - Optional: `ADMIN_API_KEY`
+3. Deploy. On first boot the API creates tables automatically (`EnsureCreated`).
+4. Copy the Render URL, e.g. `https://tournamentapp-xxxx.onrender.com`
 
-Cold starts: free services sleep after idle; first request can take ~30–60s.
+Cold starts on free Render can take 30–60s after idle.
 
-### 3. Frontend on Vercel (free)
+**If you already have a Render service:** open it → Environment → add/update `ConnectionStrings__Default` with the Neon URI → **Save** → Manual Deploy.
 
-1. Sign up at https://vercel.com with GitHub
-2. **Add New Project** → import the same repo
-3. Root Directory: `frontend`
-4. Framework: Next.js (auto)
-5. Environment variable:
-   - `NEXT_PUBLIC_API_URL` = your Render URL (no trailing slash)
-6. Deploy → copy the Vercel URL
-7. On Render: set `CORS_ORIGINS` to that Vercel URL and redeploy the API
+### 4. Frontend on Vercel
 
-### 4. Smoke test
+1. Import the same repo, root `frontend`
+2. `NEXT_PUBLIC_API_URL` = Render URL with **no** trailing slash and **no** `/api` path
+3. Deploy, then set Render `CORS_ORIGINS` to the Vercel URL and redeploy the API
 
-Open the Vercel site → **Load demo** or create a tournament.
+### 5. Verify persistence
+
+1. Create a tournament on the live site
+2. Trigger a Render redeploy
+3. Tournament should still be there (Neon survives redeploys; old SQLite-on-disk data does not migrate automatically)
 
 ## Seed sample data
 

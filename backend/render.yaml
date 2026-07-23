@@ -12,6 +12,6 @@ services:
         sync: false
       - key: ADMIN_API_KEY
         sync: false
-      # Ephemeral SQLite on free tier (no persistent disk). Data resets on redeploy.
+      # Set this in the Render dashboard to your Neon connection string
       - key: ConnectionStrings__Default
-        value: Data Source=/tmp/tournament.db
+        sync: false
