@@ -102,3 +102,25 @@ public record TournamentDetailDto(
     int CompletedGroupMatches,
     int TotalGroupMatches
 );
+
+public record MoveTeamRequest(int TeamId, int TargetGroupId);
+public record AddGroupRequest(string? Name);
+public record AddTeamRequest(string Name, int? GroupId);
+public record RescheduleCalendarRequest(DateOnly? StartDate);
+
+public record CalendarMatchDto(
+    int MatchId,
+    int TournamentId,
+    string TournamentName,
+    string Stage,
+    string Status,
+    string? GroupName,
+    string? Label,
+    string? HomeTeamName,
+    string? AwayTeamName,
+    int? HomeScore,
+    int? AwayScore,
+    DateTime? ScheduledAt
+);
+
+public record CalendarDayDto(string Date, IReadOnlyList<CalendarMatchDto> Matches);

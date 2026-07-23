@@ -1,0 +1,136 @@
+.reschedule {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: flex-end;
+  margin-bottom: var(--space-5);
+}
+
+.reschedule .field {
+  min-width: 200px;
+}
+
+.monthBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.monthBar h2 {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-dim);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.cell,
+.cellEmpty {
+  min-height: 96px;
+  border-radius: var(--radius-md);
+}
+
+.cellEmpty {
+  background: transparent;
+}
+
+.cell {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  padding: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cellLive {
+  border-color: var(--color-border-strong);
+  background:
+    linear-gradient(160deg, rgba(245, 166, 35, 0.12), transparent 55%),
+    var(--color-bg-elevated);
+}
+
+.dayNum {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.match {
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.match em {
+  font-style: normal;
+  color: var(--color-brand-hot);
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
+}
+
+.queue h2 {
+  font-size: 1.8rem;
+  margin-bottom: var(--space-4);
+}
+
+.queueList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.queueList li {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.queueList time {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.queueList a {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.queueList strong {
+  color: var(--color-brand-hot);
+}
+
+@media (max-width: 800px) {
+  .weekdays,
+  .grid {
+    display: none;
+  }
+
+  .monthBar {
+    display: none;
+  }
+}

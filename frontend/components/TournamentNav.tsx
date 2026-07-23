@@ -2,7 +2,8 @@ import Link from "next/link";
 
 const links = [
   { href: "", label: "Overview" },
-  { href: "/groups", label: "Groups" },
+  { href: "/groups", label: "Standings" },
+  { href: "/manage", label: "Manage" },
   { href: "/matches", label: "Matches" },
   { href: "/bracket", label: "Bracket" },
 ] as const;
@@ -12,7 +13,7 @@ export function TournamentNav({
   active,
 }: {
   id: number | string;
-  active: "overview" | "groups" | "matches" | "bracket";
+  active: "overview" | "groups" | "manage" | "matches" | "bracket";
 }) {
   return (
     <nav className="subnav">

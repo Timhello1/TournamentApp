@@ -21,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<TournamentFactory>();
 builder.Services.AddScoped<StandingsCalculator>();
 builder.Services.AddScoped<BracketGenerator>();
+builder.Services.AddScoped<GroupManager>();
+builder.Services.AddScoped<CalendarScheduler>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -388,6 +390,97 @@ app.MapPost("/api/seed", async (AppDbContext db, TournamentFactory factory) =>
 
     var created = await LoadTournamentAsync(db, tournament.Id);
     return Results.Created($"/api/tournaments/{tournament.Id}", Mapper.ToDetail(created!));
+});
+
+
+app.MapPost("/api/tournaments/{id:int}/groups/move", async (
+    int id,
+    MoveTeamRequest req,
+    AppDbContext db,
+    GroupManager groups) =>
+{
+    var t = await LoadTournamentAsync(db, id);
+    if (t is null) return Results.NotFound();
+    try
+    {
+        await groups.MoveTeamAsync(t, req.TeamId, req.TargetGroupId);
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+    var updated = await LoadTournamentAsync(db, id);
+    return Results.Ok(Mapper.ToDetail(updated!));
+});
+
+app.MapPost("/api/tournaments/{id:int}/groups/shuffle", async (
+    int id,
+    AppDbContext db,
+    GroupManager groups) =>
+{
+    var t = await LoadTournamentAsync(db, id);
+    if (t is null) return Results.NotFound();
+    try
+    {
+        await groups.ShuffleAsync(t);
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+    var updated = await LoadTournamentAsync(db, id);
+    return Results.Ok(Mapper.ToDetail(updated!));
+});
+
+app.MapPost("/api/tournaments/{id:int}/groups", async (
+    int id,
+    AddGroupRequest req,
+    AppDbContext db,
+    GroupManager groups) =>
+{
+    var t = await LoadTournamentAsync(db, id);
+    if (t is null) return Results.NotFound();
+    try
+    {
+        await groups.AddGroupAsync(t, req.Name);
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+    var updated = await LoadTournamentAsync(db, id);
+    return Results.Ok(Mapper.ToDetail(updated!));
+});
+
+app.MapPost("/api/tournaments/{id:int}/teams", async (
+    int id,
+    AddTeamRequest req,
+    AppDbContext db,
+    GroupManager groups) =>
+{
+    var t = await LoadTournamentAsync(db, id);
+    if (t is null) return Results.NotFound();
+    try
+    {
+        await groups.AddTeamAsync(t, req.Name, req.GroupId);
+    }
+    catch (InvalidOperationException ex)
+    {
+        return Results.BadRequest(new { error = ex.Message });
+    }
+    var updated = await LoadTournamentAsync(db, id);
+    return Results.Ok(Mapper.ToDetail(updated!));
+});
+
+app.MapGet("/api/calendar", async (CalendarScheduler calendar) =>
+    Results.Ok(await calendar.GetCalendarAsync()));
+
+app.MapPost("/api/calendar/reschedule", async (
+    RescheduleCalendarRequest? req,
+    CalendarScheduler calendar) =>
+{
+    var days = await calendar.RescheduleAsync(req?.StartDate);
+    return Results.Ok(days);
 });
 
 app.Run();

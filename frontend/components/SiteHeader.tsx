@@ -9,6 +9,7 @@ export function SiteHeader() {
         </Link>
         <nav className="nav-links">
           <Link href="/tournaments">Tournaments</Link>
+          <Link href="/calendar">Calendar</Link>
           <Link href="/tournaments/new" className="btn btn--primary">
             New tournament
           </Link>

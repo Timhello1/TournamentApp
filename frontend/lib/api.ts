@@ -104,6 +104,27 @@ export type CreateTournamentPayload = {
   targetGroupSize?: number;
 };
 
+
+export type CalendarMatch = {
+  matchId: number;
+  tournamentId: number;
+  tournamentName: string;
+  stage: string;
+  status: string;
+  groupName?: string | null;
+  label?: string | null;
+  homeTeamName?: string | null;
+  awayTeamName?: string | null;
+  homeScore?: number | null;
+  awayScore?: number | null;
+  scheduledAt?: string | null;
+};
+
+export type CalendarDay = {
+  date: string;
+  matches: CalendarMatch[];
+};
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5080";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -163,6 +184,31 @@ export const api = {
   getBracket: (id: number | string) =>
     request<Bracket>(`/api/tournaments/${id}/bracket`),
   seed: () => request<TournamentDetail>("/api/seed", { method: "POST" }),
+  moveTeam: (id: number | string, teamId: number, targetGroupId: number) =>
+    request<TournamentDetail>(`/api/tournaments/${id}/groups/move`, {
+      method: "POST",
+      body: JSON.stringify({ teamId, targetGroupId }),
+    }),
+  shuffleGroups: (id: number | string) =>
+    request<TournamentDetail>(`/api/tournaments/${id}/groups/shuffle`, {
+      method: "POST",
+    }),
+  addGroup: (id: number | string, name?: string) =>
+    request<TournamentDetail>(`/api/tournaments/${id}/groups`, {
+      method: "POST",
+      body: JSON.stringify({ name: name || null }),
+    }),
+  addTeam: (id: number | string, name: string, groupId?: number | null) =>
+    request<TournamentDetail>(`/api/tournaments/${id}/teams`, {
+      method: "POST",
+      body: JSON.stringify({ name, groupId: groupId ?? null }),
+    }),
+  getCalendar: () => request<CalendarDay[]>("/api/calendar"),
+  rescheduleCalendar: (startDate?: string | null) =>
+    request<CalendarDay[]>("/api/calendar/reschedule", {
+      method: "POST",
+      body: JSON.stringify({ startDate: startDate || null }),
+    }),
 };
 
 export function formatWhen(iso?: string | null) {
