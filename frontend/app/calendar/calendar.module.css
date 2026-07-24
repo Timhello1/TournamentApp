@@ -84,14 +84,14 @@
 .cellLive {
   border-color: var(--color-border-strong);
   background:
-    linear-gradient(160deg, rgba(245, 166, 35, 0.12), transparent 55%),
+    linear-gradient(160deg, var(--color-accent-glow), transparent 55%),
     var(--color-bg-elevated);
 }
 
 .cellPlayed {
-  border-color: rgba(61, 203, 138, 0.45);
+  border-color: var(--color-success);
   background:
-    linear-gradient(160deg, rgba(61, 203, 138, 0.12), transparent 55%),
+    linear-gradient(160deg, color-mix(in srgb, var(--color-success) 18%, transparent), transparent 55%),
     var(--color-bg-elevated);
 }
 

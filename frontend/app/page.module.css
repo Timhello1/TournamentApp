@@ -15,16 +15,18 @@
 
 .kicker {
   font-family: var(--font-display);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   color: var(--color-brand);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
+  font-weight: var(--display-weight);
   margin-bottom: var(--space-3);
 }
 
 .title {
-  font-size: clamp(3.4rem, 10vw, 6.2rem);
+  font-size: clamp(3.2rem, 9vw, 5.8rem);
   margin-bottom: var(--space-4);
   text-wrap: balance;
+  color: var(--color-text);
 }
 
 .lead {
@@ -46,13 +48,13 @@
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(105deg, transparent 40%, rgba(245, 166, 35, 0.05) 55%, transparent 70%),
+    linear-gradient(105deg, transparent 40%, var(--color-accent-glow) 55%, transparent 70%),
     repeating-linear-gradient(
       -12deg,
       transparent,
       transparent 48px,
-      rgba(255, 255, 255, 0.015) 48px,
-      rgba(255, 255, 255, 0.015) 49px
+      color-mix(in srgb, var(--color-text) 4%, transparent) 48px,
+      color-mix(in srgb, var(--color-text) 4%, transparent) 49px
     );
 }
 
@@ -63,7 +65,7 @@
   width: 55vw;
   max-width: 720px;
   height: 55vh;
-  border: 1px solid rgba(245, 166, 35, 0.28);
+  border: 1px solid var(--hero-stripe);
   border-radius: 40% 60% 55% 45% / 45% 40% 60% 55%;
   transform: rotate(18deg);
   animation: pulse-line 5s ease-in-out infinite;
@@ -76,7 +78,7 @@
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(245, 166, 35, 0.22), transparent 70%);
+  background: radial-gradient(circle, var(--hero-glow), transparent 70%);
   filter: blur(8px);
   animation: rise 1.2s ease both;
 }

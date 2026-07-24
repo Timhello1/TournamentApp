@@ -1,0 +1,118 @@
+.root {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--btn-radius, var(--radius-md));
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.trigger:hover {
+  border-color: var(--color-brand);
+}
+
+.dots,
+.swatches {
+  display: inline-flex;
+  gap: 0.2rem;
+}
+
+.dots i,
+.swatches i {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: block;
+}
+
+.triggerLabel {
+  color: var(--color-text-muted);
+}
+
+.panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  width: min(20rem, 84vw);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glow);
+  padding: var(--space-3);
+  z-index: 60;
+  animation: rise 0.18s ease both;
+}
+
+.panelTitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-dim);
+  margin: 0 0 var(--space-2);
+  padding: 0 var(--space-2);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.option {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+  text-align: left;
+  padding: 0.7rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.option:hover,
+.optionActive {
+  background: var(--color-bg-soft);
+  border-color: var(--color-border);
+}
+
+.optionActive {
+  border-color: var(--color-brand);
+}
+
+.copy {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.copy strong {
+  font-size: 0.92rem;
+}
+
+.copy em {
+  font-style: normal;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 720px) {
+  .triggerLabel {
+    display: none;
+  }
+}

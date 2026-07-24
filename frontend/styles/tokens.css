@@ -1,29 +1,225 @@
-:root {
-  /* Arena charcoal + amber */
-  --color-bg: #0e1114;
-  --color-bg-elevated: #161b20;
-  --color-bg-soft: #1c232b;
-  --color-surface: #222a33;
-  --color-border: #2f3a46;
-  --color-border-strong: #3d4b5a;
+:root,
+[data-theme="meadow"] {
+  /* A — Soft meadow */
+  --color-bg: #fff7f2;
+  --color-bg-elevated: #ffffff;
+  --color-bg-soft: #ffe8df;
+  --color-surface: #f3e4f0;
+  --color-border: #e8d0dc;
+  --color-border-strong: #c9a8bc;
 
-  --color-text: #f2efe8;
-  --color-text-muted: #9aa6b2;
-  --color-text-dim: #6b7785;
+  --color-text: #3b2a4a;
+  --color-text-muted: #7a6588;
+  --color-text-dim: #9a879f;
 
-  --color-brand: #f5a623;
-  --color-brand-hot: #ffc857;
-  --color-brand-deep: #c47e0a;
-  --color-accent-glow: rgba(245, 166, 35, 0.18);
+  --color-brand: #9fc12f;
+  --color-brand-hot: #b4d63a;
+  --color-brand-deep: #7a9a18;
+  --color-accent-glow: rgba(159, 193, 47, 0.28);
+  --color-btn-text: #1a2208;
+
+  --color-success: #3d9b6a;
+  --color-danger: #d45d6a;
+  --color-info: #7b6bb0;
+
+  --color-header-bg: rgba(255, 247, 242, 0.86);
+  --body-wash-1: rgba(255, 176, 196, 0.35);
+  --body-wash-2: rgba(155, 120, 180, 0.18);
+  --body-base-top: #ffe4ec;
+  --body-base-mid: #fff7f2;
+  --body-base-bottom: #f3efe8;
+  --hero-stripe: rgba(123, 107, 176, 0.35);
+  --hero-glow: rgba(159, 193, 47, 0.35);
+
+  --font-display: "Outfit", "Segoe UI", sans-serif;
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 800;
+  --display-tracking: -0.02em;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --btn-radius: 999px;
+  --shadow-glow: 0 12px 40px var(--color-accent-glow);
+}
+
+[data-theme="chalk"] {
+  /* B — Court chalk */
+  --color-bg: #f4f1ea;
+  --color-bg-elevated: #fffcf6;
+  --color-bg-soft: #e8e2d6;
+  --color-surface: #efe9dc;
+  --color-border: #d2caba;
+  --color-border-strong: #a89f8c;
+
+  --color-text: #1c2a22;
+  --color-text-muted: #5a665e;
+  --color-text-dim: #879188;
+
+  --color-brand: #1f6b45;
+  --color-brand-hot: #2f8f5c;
+  --color-brand-deep: #154d32;
+  --color-accent-glow: rgba(201, 92, 62, 0.22);
+  --color-btn-text: #f7f3ea;
+
+  --color-success: #1f6b45;
+  --color-danger: #c95c3e;
+  --color-info: #3d6e8c;
+
+  --color-header-bg: rgba(244, 241, 234, 0.9);
+  --body-wash-1: rgba(31, 107, 69, 0.08);
+  --body-wash-2: rgba(201, 92, 62, 0.08);
+  --body-base-top: #efe9dc;
+  --body-base-mid: #f4f1ea;
+  --body-base-bottom: #e7e1d4;
+  --hero-stripe: rgba(31, 107, 69, 0.28);
+  --hero-glow: rgba(201, 92, 62, 0.22);
+
+  --font-display: "Oswald", "Arial Narrow", sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 600;
+  --display-tracking: 0.02em;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --btn-radius: 4px;
+  --shadow-glow: 0 10px 28px rgba(28, 42, 34, 0.08);
+}
+
+[data-theme="scoreboard"] {
+  /* C — Night scoreboard */
+  --color-bg: #071422;
+  --color-bg-elevated: #0d1e30;
+  --color-bg-soft: #12263b;
+  --color-surface: #163049;
+  --color-border: #23405c;
+  --color-border-strong: #356088;
+
+  --color-text: #e8f3ff;
+  --color-text-muted: #8eacc4;
+  --color-text-dim: #5f7d96;
+
+  --color-brand: #4de1ff;
+  --color-brand-hot: #8ef0ff;
+  --color-brand-deep: #1aa7c4;
+  --color-accent-glow: rgba(77, 225, 255, 0.2);
+  --color-btn-text: #041018;
 
   --color-success: #3dcb8a;
-  --color-danger: #e85d5d;
-  --color-info: #5eb0ef;
+  --color-danger: #ff5d6c;
+  --color-info: #4de1ff;
 
-  --font-display: "Bebas Neue", "Arial Narrow", Impact, sans-serif;
-  --font-body: "DM Sans", "Segoe UI", sans-serif;
+  --color-header-bg: rgba(7, 20, 34, 0.86);
+  --body-wash-1: rgba(77, 225, 255, 0.1);
+  --body-wash-2: rgba(61, 120, 255, 0.08);
+  --body-base-top: #0a1a2b;
+  --body-base-mid: #071422;
+  --body-base-bottom: #040b14;
+  --hero-stripe: rgba(77, 225, 255, 0.28);
+  --hero-glow: rgba(77, 225, 255, 0.22);
+
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 700;
+  --display-tracking: 0.04em;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --btn-radius: 6px;
+  --shadow-glow: 0 0 36px var(--color-accent-glow);
+}
 
+[data-theme="poster"] {
+  /* D — Poster pop */
+  --color-bg: #f6f0e4;
+  --color-bg-elevated: #fffdf8;
+  --color-bg-soft: #ebe3d2;
+  --color-surface: #e5dcc8;
+  --color-border: #cfc4ad;
+  --color-border-strong: #1a1a1a;
+
+  --color-text: #121212;
+  --color-text-muted: #4a4a4a;
+  --color-text-dim: #7a7a7a;
+
+  --color-brand: #2557ff;
+  --color-brand-hot: #4d75ff;
+  --color-brand-deep: #1639c9;
+  --color-accent-glow: rgba(37, 87, 255, 0.18);
+  --color-btn-text: #ffffff;
+
+  --color-success: #1f8a4c;
+  --color-danger: #e03838;
+  --color-info: #2557ff;
+
+  --color-header-bg: rgba(246, 240, 228, 0.92);
+  --body-wash-1: rgba(37, 87, 255, 0.08);
+  --body-wash-2: rgba(0, 0, 0, 0.04);
+  --body-base-top: #efe7d6;
+  --body-base-mid: #f6f0e4;
+  --body-base-bottom: #e8e0d0;
+  --hero-stripe: rgba(18, 18, 18, 0.55);
+  --hero-glow: rgba(37, 87, 255, 0.25);
+
+  --font-display: "Archivo Black", Impact, sans-serif;
+  --font-body: "Work Sans", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 400;
+  --display-tracking: -0.01em;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --btn-radius: 0px;
+  --shadow-glow: 6px 6px 0 rgba(18, 18, 18, 0.12);
+}
+
+[data-theme="clinic"] {
+  /* E — Alpine clinic */
+  --color-bg: #f3f6f8;
+  --color-bg-elevated: #ffffff;
+  --color-bg-soft: #e7eef2;
+  --color-surface: #eef3f6;
+  --color-border: #d5dee5;
+  --color-border-strong: #9aafbc;
+
+  --color-text: #1b2a33;
+  --color-text-muted: #5b6f7b;
+  --color-text-dim: #8a9aa5;
+
+  --color-brand: #0f8f8a;
+  --color-brand-hot: #18b0aa;
+  --color-brand-deep: #0b6e6a;
+  --color-accent-glow: rgba(15, 143, 138, 0.16);
+  --color-btn-text: #ffffff;
+
+  --color-success: #1f9d6a;
+  --color-danger: #d45454;
+  --color-info: #3a7ca5;
+
+  --color-header-bg: rgba(255, 255, 255, 0.86);
+  --body-wash-1: rgba(15, 143, 138, 0.08);
+  --body-wash-2: rgba(58, 124, 165, 0.06);
+  --body-base-top: #eef4f6;
+  --body-base-mid: #f3f6f8;
+  --body-base-bottom: #e8eef2;
+  --hero-stripe: rgba(15, 143, 138, 0.25);
+  --hero-glow: rgba(15, 143, 138, 0.2);
+
+  --font-display: "Manrope", "Segoe UI", sans-serif;
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display-weight: 700;
+  --display-tracking: -0.03em;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --btn-radius: 10px;
+  --shadow-glow: 0 10px 30px rgba(27, 42, 51, 0.06);
+}
+
+:root {
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -32,14 +228,7 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4.5rem;
-
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
-
-  --shadow-glow: 0 0 40px var(--color-accent-glow);
   --max-width: 1120px;
-
   --nav-height: 4rem;
   --transition: 180ms ease;
 }
