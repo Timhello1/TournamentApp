@@ -11,4 +11,6 @@ COPY --from=build /app/publish .
 EXPOSE 8080
 # Render sets PORT; default 8080 for local Docker
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+ENV DOTNET_HOSTBUILDER_RELOADCONFIGONCHANGE=false
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
 CMD ["sh", "-c", "dotnet TournamentHub.Api.dll --urls http://0.0.0.0:${PORT:-8080}"]

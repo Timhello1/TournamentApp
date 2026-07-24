@@ -4,6 +4,8 @@ using TournamentHub.Api.Data;
 using TournamentHub.Api.Models;
 using TournamentHub.Api.Services;
 
+// Render/shared Linux hosts often hit inotify limits with config file watchers.
+Environment.SetEnvironmentVariable("DOTNET_HOSTBUILDER_RELOADCONFIGONCHANGE", "false");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(o =>
