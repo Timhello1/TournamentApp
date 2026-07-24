@@ -28,7 +28,7 @@ public class CalendarScheduler
             .ToListAsync();
 
         return matches
-            .GroupBy(m => DateOnly.FromDateTime(DateTime.SpecifyKind(m.ScheduledAt!.Value, DateTimeKind.Utc).Date))
+            .GroupBy(m => DateOnly.FromDateTime(m.ScheduledAt!.Value.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind(m.ScheduledAt.Value, DateTimeKind.Utc) : m.ScheduledAt.Value.ToUniversalTime()))
             .OrderBy(g => g.Key)
             .Select(g => new CalendarDayDto(
                 g.Key.ToString("yyyy-MM-dd"),
